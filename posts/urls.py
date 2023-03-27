@@ -1,6 +1,6 @@
 from django.urls import path
 
-from accounts.views import like_post
+from accounts.views import like_post, ProfileView
 from posts.views import IndexView, PostAddView, MainView, UserProfileView, create_comment
 
 urlpatterns = [
@@ -10,5 +10,6 @@ urlpatterns = [
     path('users/<int:pk>/', UserProfileView.as_view(), name='user_profile'),
     path('post/<int:post_pk>/comment/', create_comment, name='create_comment'),
     path('<int:post_pk>/like/', like_post, name='like'),
+    path('profile/<int:pk>', ProfileView.as_view(), name='profile'),
 
 ]

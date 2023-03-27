@@ -84,4 +84,3 @@ def like_post(request, post_pk):
         post.save()
         messages.success(request, 'Post liked successfully.')
     return redirect('main')
-

@@ -2,8 +2,6 @@
 {% block title %}Пользователь{% endblock %}
 
 {% block menu %}
-    <li><a href=" {% url 'change' user_obj.pk %}" class="btn btn-primary">Редактировать</a></li>
-    <li><a href="#" class="btn btn-primary">Смена пароля</a></li>
 {% endblock %}
 
 {% block content %}
@@ -14,5 +12,18 @@
     <p>Имя: {{ user_obj.first_name }}</p>
     <p>Фамилия: {{ user_obj.last_name }}</p>
     <p>Почта: {{ user_obj.email }}</p>
-
+ {% if request.user.is_authenticated %}
+        {% if request.user != user_obj %}
+            <form method="POST" action="{% url 'subscribe' user_obj.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">
+                    {% if request.user in user_obj.subscriptions.all %}
+                        Unfollow
+                    {% else %}
+                        Follow
+                    {% endif %}
+                </button>
+            </form>
+        {% endif %}
+    {% endif %}
 {% endblock %}

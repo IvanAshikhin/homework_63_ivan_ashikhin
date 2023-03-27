@@ -5,8 +5,9 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.http import urlencode
-from django.views.generic import ListView, CreateView, DetailView, FormView
+from django.views.generic import ListView, CreateView, DetailView, FormView, UpdateView
 
+from accounts.models import Account
 from posts.forms import SearchForm, PostForm, ReviewForm
 from posts.models import Post, Comment
 
@@ -65,8 +66,6 @@ class MainView(ListView):
     template_name = 'main.html'
     model = Post
     context_object_name = 'posts'
-    paginate_by = 6
-    paginate_orphans = 1
 
     def get(self, request, *args, **kwargs):
         self.form = self.get_search_form()
@@ -139,3 +138,20 @@ def create_comment(request, post_pk):
     context = {'post': post, 'form': form, 'comments': comments}
     return render(request, 'post_detail.html', context)
 
+
+class SubscribeView(UpdateView):
+    model = Account
+    fields = []
+
+    def get_success_url(self):
+        return reverse_lazy('main')
+
+    def form_valid(self, form):
+        if self.object != self.request.user:
+            if self.request.user in self.object.subscriptions.all():
+                self.object.subscriptions.remove(self.request.user)
+            else:
+                self.object.subscriptions.add(self.request.user)
+        subscriber_count = self.object.subscriptions.count()
+        form.instance.subscriber_count = subscriber_count
+        return super().form_valid(form)
