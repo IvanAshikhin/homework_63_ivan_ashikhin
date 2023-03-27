@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}
+    Profile
+{% endblock %}
+{% block content %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <img src="{{ user_profile.profile.avatar.url }}" class="img-thumbnail" alt="Avatar">
+            </div>
+            <div class="col-lg-9 col-md-8 col-sm-6">
+                <h1>{{ user_profile.username }}</h1>
+                <p>{{ user_profile.profile.bio }}</p>
+                <hr>
+                <h2>Posts</h2>
+                {% if user_profile.posts %}
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        {% for post in user_profile.posts %}
+                            <div class="col">
+                                <div class="card h-100" style="height: 170px;width: 280px;">
+                                    {% if post.image %}
+                                        <img src="{{ post.image }}" class="card-img-top" style="width: 270px; height: 150px" alt="...">
+                                    {% else %}
+                                        <img src="https://tastystore.ru/design/no-photo.png?design=THEMENAME" class="card-img-top" style="width: 270px; height: 150px" alt="...">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ post.title }}</h5>
+                                        <p class="card-text">{{ post.description }}</p>
+                                        <p class="card-text">{{ post.likes_count }} likes</p>
+                                        <p class="card-text">{{ post.comments_count }} comments</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No posts yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

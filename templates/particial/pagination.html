@@ -1,0 +1,11 @@
+<div class="pagination">
+    <span class="step-links">
+        <a href="?{% if query %}{{ query }}&{% endif %}page=1" style="background-color:#212529">&laquo; Start</a>
+        {% if page_obj.has_previous %}
+            <a href="?{% if query %}{{ query }}&{% endif %}page={{ page_obj.previous_page_number }}"
+               style="background-color:#212529">Back</a>
+        {% else %}
+            <span class="page-disabled" style="background-color:#212529">Back</span>
+
+        {% endif %}
+        <form class="current-page paginator_form" method="get">
