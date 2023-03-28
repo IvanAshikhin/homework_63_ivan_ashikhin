@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class Post(models.Model):
     description = models.CharField(verbose_name='Описание', null=False, max_length=200)
-    image = models.CharField(max_length=10000, null=False, verbose_name='Фото')
+    image = models.CharField(max_length=100000, null=False, verbose_name='Фото')
     author = models.ForeignKey(verbose_name='Автор', to=get_user_model(), related_name='posts', null=False, blank=False,
                                on_delete=models.CASCADE)
     likes_count = models.PositiveIntegerField(verbose_name='Количество лайков', default=0)

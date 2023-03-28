@@ -82,8 +82,6 @@ class MainView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        subscribed_users = self.request.user.subscriptions.all()
-        queryset = queryset.filter(author__in=subscribed_users)
         if self.search_value:
             query = Q(username__icontains=self.search_value) | Q(email__icontains=self.search_value) | Q(
                 first_name__icontains=self.search_value) | Q(last_name__icontains=self.search_value)
@@ -92,7 +90,9 @@ class MainView(ListView):
                 queryset = queryset.filter(author=user)
             else:
                 queryset = queryset.none()
-        return queryset.order_by('-created_at')
+        else:
+            queryset = queryset.filter(author=self.request.user)
+        return queryset
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)
@@ -116,8 +116,14 @@ class UserProfileView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.filter(author_id=self.object.id).order_by('-created_at')
+        context['login'] = self.object.username
+        context['avatar'] = self.object.avatar.url if self.object.avatar else None
+        context['name'] = self.object.get_full_name()
+        context['info'] = self.object.info
+        context['posts'] = self.object.posts.order_by('-created_at')
+
         return context
+
 
 
 def create_comment(request, post_pk):

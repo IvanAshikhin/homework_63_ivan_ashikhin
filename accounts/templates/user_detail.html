@@ -5,25 +5,48 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Личная страница пользователя {{ user_obj.get_full_name|default:user_obj.username }}</h1>
-    <img src="{{ user_obj.avatar }}" alt="" style="height: 400px; width: 600px;padding-top: 30px"
-         class="img-fluid">
-    <p>Имя пользователя: {{ user_obj.username }}</p>
-    <p>Имя: {{ user_obj.first_name }}</p>
-    <p>Фамилия: {{ user_obj.last_name }}</p>
-    <p>Почта: {{ user_obj.email }}</p>
- {% if request.user.is_authenticated %}
-        {% if request.user != user_obj %}
-            <form method="POST" action="{% url 'subscribe' user_obj.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-primary">
-                    {% if request.user in user_obj.subscriptions.all %}
-                        Unfollow
-                    {% else %}
-                        Follow
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body wide">
+                    <h5 class="card-title">{{ user_obj.username }}</h5>
+                    <div class="text-center">
+                        <img src="{{ user_obj.avatar }}" alt="{{ user_obj.username }} avatar" class="rounded-circle"
+                             style="width: 120px; height: 120px; margin-right: 600px">
+                    </div>
+                    <p class="card-text">SEX: {{ user_obj.sex }}</p>
+                    {% if request.user.is_authenticated %}
+                        {% if request.user != user_obj %}
+                            <form method="POST" action="{% url 'subscribe' user_obj.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" style="margin-top: 10px">
+                                    {% if request.user in user_obj.subscriptions.all %}
+                                        Unfollow
+                                    {% else %}
+                                        Follow
+                                    {% endif %}
+                                </button>
+                            </form>
+                        {% endif %}
                     {% endif %}
-                </button>
-            </form>
-        {% endif %}
-    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            {% for post in user_obj.posts.all %}
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <img src="{{ post.image }}" class="card-img-top" style="width: 270px; height: 150px"
+                             alt="...">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.author }}</h5>
+                        <p class="card-text">{{ post.description }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Нет публикаций.</p>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
