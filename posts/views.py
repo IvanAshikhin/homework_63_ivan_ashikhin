@@ -1,11 +1,10 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
 from django.utils.http import urlencode
-from django.views.generic import ListView, CreateView, DetailView, FormView, UpdateView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView
 
 from accounts.models import Account
 from posts.forms import SearchForm, PostForm, ReviewForm
@@ -99,29 +98,6 @@ class MainView(ListView):
         context['form'] = self.form
         if self.search_value:
             context['query'] = urlencode({'search': self.search_value})
-        return context
-
-
-class UserProfileView(LoginRequiredMixin, DetailView):
-    model = get_user_model()
-    template_name = 'user_profile.html'
-    context_object_name = 'user_profile'
-
-    def get_object(self, queryset=None):
-        username = self.kwargs.get('username', None)
-        if username is not None:
-            return get_user_model().objects.get(username=username)
-        else:
-            return super().get_object(queryset)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['login'] = self.object.username
-        context['avatar'] = self.object.avatar.url if self.object.avatar else None
-        context['name'] = self.object.get_full_name()
-        context['info'] = self.object.info
-        context['posts'] = self.object.posts.order_by('-created_at')
-
         return context
 
 

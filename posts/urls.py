@@ -1,7 +1,7 @@
 from django.urls import path
 
 from accounts.views import like_post, ProfileView
-from posts.views import IndexView, PostAddView, MainView, UserProfileView, create_comment
+from posts.views import IndexView, PostAddView, MainView, create_comment
 
 urlpatterns = [
     path("main/", IndexView.as_view(), name="index_page"),
