@@ -1,9 +1,6 @@
 {% extends "base.html" %}
-<h1>Add a Review for {{ product.name }}</h1>
 {% block content %}
-<form method="POST" action="{% url 'create_comment' post.pk %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
+    <form method="POST" action="{% url 'create_comment' post.pk %}">
+        {% include 'particial/add_form.html' with button_text='Add' %}
+    </form>
 {% endblock %}

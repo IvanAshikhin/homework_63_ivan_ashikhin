@@ -82,6 +82,8 @@ class MainView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        subscribed_users = self.request.user.subscriptions.all()
+        queryset = queryset.filter(author__in=subscribed_users)
         if self.search_value:
             query = Q(username__icontains=self.search_value) | Q(email__icontains=self.search_value) | Q(
                 first_name__icontains=self.search_value) | Q(last_name__icontains=self.search_value)
@@ -90,9 +92,7 @@ class MainView(ListView):
                 queryset = queryset.filter(author=user)
             else:
                 queryset = queryset.none()
-        else:
-            queryset = queryset.filter(author=self.request.user)
-        return queryset
+        return queryset.order_by('-created_at')
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)

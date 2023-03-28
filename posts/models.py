@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils import timezone
 
 
 class Post(models.Model):
@@ -9,6 +10,7 @@ class Post(models.Model):
                                on_delete=models.CASCADE)
     likes_count = models.PositiveIntegerField(verbose_name='Количество лайков', default=0)
     comments_count = models.PositiveIntegerField(verbose_name='Количество комментариев', default=0)
+    created_at = models.DateTimeField(verbose_name='Дата создания', default=timezone.now)
 
 
 class Comment(models.Model):

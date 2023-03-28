@@ -8,9 +8,7 @@
     </li>
 {% endblock %}
 {% block content %}
-    <span class="navbar-text follow">
-                Followers: {{ post.author.subscriber_count }}
-            </span>
+    Followers: {{ account.subscriber_count }}
     {% for post in posts %}
         <div class="card mb-5 mt-5">
             <div class="card-body">

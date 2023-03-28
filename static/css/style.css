@@ -446,3 +446,9 @@ input[type="text"], textarea, input[type="number"] {
     text-decoration: none;
 }
 
+.inst {
+    margin-right: 400px;
+}
+.r_card{
+    width: 600px;
+}

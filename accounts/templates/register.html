@@ -2,27 +2,25 @@
 {% load django_bootstrap5 %}
 {% block content %}
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-6 mt-5 r_card">
             <div class="card border-0 shadow-sm rounded">
-                <div class="card-body">
-                    <h3 class="text-center mb-4">{{ form_title }}</h3>
+                <div class="card-body r_card-2">
+                    <h3 class="text-center mb-4 r_card-3">{{ form_title }}</h3>
                     <form method="post">
                         {% csrf_token %}
                         {% bootstrap_form form layout='horizontal' %}
-                        <p class="text-muted text-center">
-                            By clicking Sign Up, you agree to our <a href="#">Terms</a>, <a href="#">Data
-                            Policy</a> and <a href="#">Cookie Policy</a>.
+
                         </p>
 
                         <div class="col-12">
-                            {% bootstrap_button button_type="submit" content='Sign Up' button_class='w-100' %}
+                            {% bootstrap_button button_type="submit" content='Sign Up' button_class='w-50' %}
                         </div>
-                        <div class="col-12 text-center mt-4">
+                        <div class="col-12  mt-4">
                             <p>Have an account? <a href="{% url 'login' %}">Log In</a></p>
                         </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 {% endblock %}
