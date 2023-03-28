@@ -85,13 +85,13 @@ class MainView(ListView):
         if self.search_value:
             query = Q(username__icontains=self.search_value) | Q(email__icontains=self.search_value) | Q(
                 first_name__icontains=self.search_value) | Q(last_name__icontains=self.search_value)
-            user = User.objects.filter(query).first()
+            user = get_user_model().objects.filter(query).first()
             if user:
-                queryset = queryset.filter(author=user)
+                queryset = queryset.filter(author__in=user.subscribers.all())
             else:
                 queryset = queryset.none()
         else:
-            queryset = queryset.filter(author=self.request.user)
+            queryset = queryset.filter(author__in=self.request.user.subscribers.all())
         return queryset
 
     def get_context_data(self, object_list=None, **kwargs):
@@ -123,7 +123,6 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         context['posts'] = self.object.posts.order_by('-created_at')
 
         return context
-
 
 
 def create_comment(request, post_pk):
